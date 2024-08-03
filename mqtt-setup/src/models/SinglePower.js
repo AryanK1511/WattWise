@@ -1,4 +1,6 @@
 class SinglePower {
+  static entryCounter = 0; // Static counter to track the number of entries
+
   constructor(power, timestamp, is_public_holiday) {
     const localDate = this.convertTimestampToTorontoTime(timestamp);
     this.power = power;
@@ -6,6 +8,7 @@ class SinglePower {
     this.weekday = this.convertWeekday(localDate.getDay());
     this.is_weekend = [5, 6].includes(this.weekday) ? 1 : 0; // Saturday (5) and Sunday (6) are weekends
     this.is_public_holiday = is_public_holiday ? 1 : 0;
+    this.hour = this.calculateHour();
   }
 
   convertTimestampToTorontoTime(timestamp) {
@@ -42,6 +45,13 @@ class SinglePower {
   convertWeekday(day) {
     // Convert Sunday (0) to 6, and shift other days to start the week on Monday
     return day === 0 ? 6 : day - 1;
+  }
+
+  calculateHour() {
+    // Increment the entry counter and calculate the hour
+    SinglePower.entryCounter++;
+    const hour = Math.floor(SinglePower.entryCounter / 2);
+    return hour % 23;
   }
 }
 
