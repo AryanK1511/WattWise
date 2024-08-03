@@ -3,7 +3,7 @@ import { getResponse } from "./model";
 import axios from "axios";
 
 //const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino?limit=60";
-const url = "http://localhost:3000/power/arduino?limit=60";
+const url = "http://localhost:3000/power/arduino?limit=2520";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
@@ -15,8 +15,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     const ngrok_responseData = ngrok_res.data;
     const extractedData = ngrok_responseData.map((data: any) => ({
-      timestamp: data.timestamp,
       power: data.power,
+      hour: data.hour,
+      weekday: data.weekday,
+      is_weekend: data.is_weekend,
+      is_holiday: data.is_public_holiday,
     }));
 
     console.log(extractedData);
