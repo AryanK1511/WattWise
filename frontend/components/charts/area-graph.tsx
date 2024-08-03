@@ -1,43 +1,85 @@
-'use client';
+"use client";
 
-import { TrendingUp } from 'lucide-react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
+import React, { useState, useEffect } from "react";
+import { TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart';
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 }
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
 ];
 
 const chartConfig = {
   desktop: {
-    label: 'Desktop',
-    color: 'hsl(var(--chart-1))'
+    label: "Desktop",
+    color: "hsl(var(--chart-1))",
   },
   mobile: {
-    label: 'Mobile',
-    color: 'hsl(var(--chart-2))'
-  }
+    label: "Mobile",
+    color: "hsl(var(--chart-2))",
+  },
 } satisfies ChartConfig;
 
-export function AreaGraph() {
+export function AreaGraph({ data }: { data: any }) {
+  const [dataArray, setDataArray] = useState<any[]>([]);
+  const [predictedData, setPredictedData] = useState<any>({});
+
+  // Fetch the data from flask model
+  const getPredictedData = async () => {
+    try {
+      const res = await fetch(`/api/flask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataArray),
+      });
+
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const res_data = await res.json();
+      setPredictedData(res_data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const newData = data;
+    setDataArray((prevData) => [...prevData, newData]);
+  }, [data]);
+
+  // Update the data array and fetch new predicted data
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await getPredictedData();
+      console.log("The predicted data is: ", predictedData);
+    }, 1300);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [predictedData]);
+
   return (
     <Card>
       <CardHeader>
@@ -56,7 +98,7 @@ export function AreaGraph() {
             data={chartData}
             margin={{
               left: 12,
-              right: 12
+              right: 12,
             }}
           >
             <CartesianGrid vertical={false} />

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [data, setData] = useState<any>({});
 
+  // Fetch the data from dynamo DB
   const getDynamoData = async () => {
     try {
       const res = await fetch(`/api/dynamo`);
@@ -24,6 +25,7 @@ export default function Home() {
     }
   };
 
+  // Fetch the data every 1.3 seconds
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await getDynamoData();
@@ -41,7 +43,7 @@ export default function Home() {
           <BarGraph data={data} />
         </div>
         <div className="col-span-4">
-          <AreaGraph />
+          <AreaGraph data={data} />
         </div>
         <div className="col-span-4 md:col-span-3">
           <PieGraph data={data} />
