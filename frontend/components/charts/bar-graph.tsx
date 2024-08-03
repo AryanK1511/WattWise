@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -16,136 +17,153 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { time } from "console";
 
 export const description = "An interactive bar chart";
 
-const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
+const chartDataHard = [
+  { name: "2024-04-01", desktop: 2.5 * 200, mobile: 150 },
+  { name: "2024-04-02", desktop: 2.5 * 200, mobile: 180 },
+  { name: "2024-04-03", desktop: 2.5 * 200, mobile: 120 },
+  { name: "2024-04-04", desktop: 2.5 * 200, mobile: 260 },
+  { name: "2024-04-05", desktop: 2.5 * 200, mobile: 290 },
+  { name: "2024-04-06", desktop: 2.5 * 200, mobile: 340 },
+  { name: "2024-04-07", desktop: 2.5 * 200, mobile: 180 },
+  { name: "2024-04-08", desktop: 2.5 * 200, mobile: 320 },
+  { name: "2024-04-09", desktop: 2.5 * 220, mobile: 110 },
+  { name: "2024-04-10", desktop: 2.5 * 220, mobile: 190 },
+  { name: "2024-04-11", desktop: 2.5 * 300, mobile: 350 },
+  { name: "2024-04-12", desktop: 2.5 * 300, mobile: 210 },
+  { name: "2024-04-13", desktop: 2.5 * 300, mobile: 380 },
+  { name: "2024-04-14", desktop: 2.5 * 300, mobile: 220 },
+  { name: "2024-04-15", desktop: 2.5 * 300, mobile: 170 },
+  { name: "2024-04-16", desktop: 2.5 * 300, mobile: 190 },
+  { name: "2024-04-17", desktop: 2.5 * 260, mobile: 360 },
+  { name: "2024-04-18", desktop: 2.5 * 260, mobile: 410 },
+  { name: "2024-04-19", desktop: 2.5 * 260, mobile: 180 },
+  { name: "2024-04-20", desktop: 2.5 * 260, mobile: 150 },
+  { name: "2024-04-21", desktop: 2.5 * 250, mobile: 200 },
+  { name: "2024-04-22", desktop: 2.5 * 240, mobile: 170 },
+  { name: "2024-04-23", desktop: 2.5 * 230, mobile: 230 },
+  { name: "2024-04-24", desktop: 2.5 * 230, mobile: 290 },
+  { name: "2024-04-25", desktop: 2.5 * 230, mobile: 250 },
+  { name: "2024-04-26", desktop: 2.5 * 230, mobile: 130 },
+  { name: "2024-04-27", desktop: 2.5 * 230, mobile: 420 },
+  { name: "2024-04-28", desktop: 2.5 * 230, mobile: 180 },
+  { name: "2024-04-29", desktop: 2.5 * 230, mobile: 240 },
+  { name: "2024-04-30", desktop: 2.5 * 230, mobile: 380 },
+  { name: "2024-05-01", desktop: 2.5 * 230, mobile: 220 },
+  { name: "2024-05-02", desktop: 2.5 * 240, mobile: 310 },
+  { name: "2024-05-03", desktop: 2.5 * 240, mobile: 190 },
+  { name: "2024-05-04", desktop: 2.5 * 250, mobile: 420 },
+  { name: "2024-05-05", desktop: 2.5 * 250, mobile: 390 },
+  { name: "2024-05-06", desktop: 2.5 * 260, mobile: 520 },
+  { name: "2024-05-07", desktop: 2.5 * 260, mobile: 300 },
+  { name: "2024-05-08", desktop: 2.5 * 270, mobile: 210 },
+  { name: "2024-05-09", desktop: 2.5 * 270, mobile: 180 },
+  { name: "2024-05-10", desktop: 2.5 * 280, mobile: 330 },
+  { name: "2024-05-11", desktop: 2.5 * 280, mobile: 270 },
+  { name: "2024-05-12", desktop: 2.5 * 280, mobile: 240 },
+  { name: "2024-05-13", desktop: 2.5 * 290, mobile: 160 },
+  { name: "2024-05-14", desktop: 2.5 * 290, mobile: 490 },
+  { name: "2024-05-15", desktop: 2.5 * 295, mobile: 380 },
+  { name: "2024-05-16", desktop: 2.5 * 295, mobile: 400 },
+  { name: "2024-05-17", desktop: 2.5 * 295, mobile: 420 },
+  { name: "2024-05-18", desktop: 2.5 * 295, mobile: 350 },
+  { name: "2024-05-19", desktop: 2.5 * 295, mobile: 180 },
+  { name: "2024-05-20", desktop: 2.5 * 300, mobile: 230 },
+  { name: "2024-05-21", desktop: 2.5 * 295, mobile: 140 },
+  { name: "2024-05-22", desktop: 2.5 * 295, mobile: 120 },
+  { name: "2024-05-23", desktop: 2.5 * 295, mobile: 290 },
+  { name: "2024-05-24", desktop: 2.5 * 295, mobile: 220 },
+  { name: "2024-05-25", desktop: 2.5 * 295, mobile: 250 },
+  { name: "2024-05-26", desktop: 2.5 * 295, mobile: 170 },
+  { name: "2024-05-27", desktop: 2.5 * 295, mobile: 460 },
+  { name: "2024-05-28", desktop: 2.5 * 295, mobile: 190 },
+  { name: "2024-05-29", desktop: 2.5 * 295, mobile: 130 },
+  { name: "2024-05-30", desktop: 2.5 * 295, mobile: 280 },
+  { name: "2024-05-31", desktop: 2.5 * 295, mobile: 230 },
+  { name: "2024-06-01", desktop: 2.5 * 190, mobile: 200 },
+  { name: "2024-06-02", desktop: 2.5 * 190, mobile: 410 },
+  { name: "2024-06-03", desktop: 2.5 * 190, mobile: 160 },
+  { name: "2024-06-04", desktop: 2.5 * 190, mobile: 380 },
+  { name: "2024-06-05", desktop: 2.5 * 190, mobile: 140 },
+  { name: "2024-06-06", desktop: 2.5 * 190, mobile: 250 },
+  { name: "2024-06-07", desktop: 2.5 * 190, mobile: 370 },
+  { name: "2024-06-08", desktop: 2.5 * 190, mobile: 320 },
+  { name: "2024-06-09", desktop: 2.5 * 200, mobile: 480 },
+  { name: "2024-06-10", desktop: 2.5 * 200, mobile: 200 },
+  { name: "2024-06-11", desktop: 2.5 * 200, mobile: 150 },
+  { name: "2024-06-12", desktop: 2.5 * 200, mobile: 420 },
+  { name: "2024-06-13", desktop: 2.5 * 200, mobile: 130 },
+  { name: "2024-06-14", desktop: 2.5 * 200, mobile: 380 },
+  { name: "2024-06-15", desktop: 2.5 * 200, mobile: 350 },
+  { name: "2024-06-16", desktop: 2.5 * 200, mobile: 310 },
+  { name: "2024-06-17", desktop: 2.5 * 190, mobile: 520 },
+  { name: "2024-06-18", desktop: 2.5 * 190, mobile: 170 },
+  { name: "2024-06-19", desktop: 2.5 * 190, mobile: 290 },
+  { name: "2024-06-20", desktop: 2.5 * 180, mobile: 450 },
+  { name: "2024-06-21", desktop: 2.5 * 180, mobile: 210 },
+  { name: "2024-06-22", desktop: 2.5 * 300, mobile: 270 },
+  { name: "2024-06-23", desktop: 2.5 * 180, mobile: 530 },
+  { name: "2024-06-24", desktop: 2.5 * 190, mobile: 180 },
+  { name: "2024-06-25", desktop: 2.5 * 190, mobile: 190 },
+  { name: "2024-06-26", desktop: 2.5 * 190, mobile: 380 },
+  { name: "2024-06-27", desktop: 2.5 * 190, mobile: 490 },
+  { name: "2024-06-28", desktop: 2.5 * 190, mobile: 200 },
+  { name: "2024-06-29", desktop: 2.5 * 190, mobile: 160 },
+  { name: "2024-06-30", desktop: 2.5 * 190, mobile: 400 },
 ];
 
 const chartConfig = {
   views: {
-    label: "Page Views",
+    label: "Power Usage Per Minute",
   },
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-5))",
   },
   mobile: {
     label: "Mobile",
-    color: "hsl(var(--chart-2))",
+    color: "#12B981",
   },
 } satisfies ChartConfig;
 
 export function BarGraph(data: any) {
+  const [chartData, setChartData] = useState<any>();
+  const [total, setTotal] = useState<any>({ desktop: 0, mobile: 0 });
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("desktop");
 
-  const total = React.useMemo(
-    () => ({
-      desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
-      mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0),
-    }),
-    []
-  );
+  React.useEffect(() => {
+    chartDataHard[chartDataHard.length - 1].desktop = Number(data.data.power);
+
+    let currentTime = new Date().getTime();
+    let currentHour, currentMinute;
+
+    for (let i = 90; i >= 0; i--) {
+      currentHour = new Date(currentTime).getHours();
+      currentMinute = new Date(currentTime).getMinutes();
+      chartDataHard[i].name = `${currentHour
+        .toString()
+        .padStart(2, "0")}:${currentMinute.toString().padStart(2, "0")}`;
+      currentTime -= 60000 * 60;
+    }
+
+    setChartData(chartDataHard);
+    setTotal({
+      desktop: chartDataHard.reduce((acc, { desktop }) => acc + desktop, 0),
+      mobile: chartDataHard.reduce((acc, { mobile }) => acc + mobile, 0),
+    });
+  }, [data]);
 
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>Bar Chart - Interactive</CardTitle>
+          <CardTitle>Power Consumption</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 3 months
+            Showing the power consumption in the last 90 minutes
           </CardDescription>
         </div>
         <div className="flex">
@@ -159,10 +177,14 @@ export function BarGraph(data: any) {
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">
-                  {chartConfig[chart].label}
+                  {chartConfig[chart].label == "Desktop"
+                    ? "Drawing Room"
+                    : "Bedroom"}
                 </span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total[key as keyof typeof total].toLocaleString()}
+                  {chartConfig[chart].label == "Desktop"
+                    ? total.desktop
+                    : total.mobile}
                 </span>
               </button>
             );
@@ -184,31 +206,31 @@ export function BarGraph(data: any) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey="name"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
+              // tickFormatter={(value) => {
+              //   const date = new Date(value);
+              //   return date.toLocaleDateString("en-US", {
+              //     month: "short",
+              //     day: "numeric",
+              //   });
+              // }}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="views"
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
+                  // labelFormatter={(value) => {
+                  //   return new Date(value).toLocaleDateString("en-US", {
+                  //     month: "short",
+                  //     day: "numeric",
+                  //     year: "numeric",
+                  //   });
+                  // }}
                 />
               }
             />

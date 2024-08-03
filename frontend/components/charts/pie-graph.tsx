@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { Label, Pie, PieChart } from "recharts";
 
 import {
@@ -18,31 +19,31 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-let chartData = [
+let chartDataHard = [
   { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "other", visitors: 1, fill: "var(--color-other)" },
+  { browser: "other", visitors: 100, fill: "var(--color-other)" },
 ];
 
 const chartConfig = {
   firefox: {
     label: "Firefox",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--chart-5))",
   },
   other: {
     label: "Other",
-    color: "hsl(var(--chart-5))",
+    color: "#12B981",
   },
 } satisfies ChartConfig;
 
 export function PieGraph(data: any) {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+  const [chartData, setChartData] = useState<any>();
+  const [totalPower, setTotalPower] = useState<number>(0);
 
   React.useEffect(() => {
-    console.log(JSON.stringify(data));
-    chartData[0].visitors = data;
-  });
+    chartDataHard[0].visitors = Number(data.data.power);
+    setChartData(chartDataHard);
+    setTotalPower(Number(data.data.power) + 100);
+  }, [data]);
 
   return (
     <Card className="flex flex-col">
@@ -68,6 +69,7 @@ export function PieGraph(data: any) {
               nameKey="browser"
               innerRadius={60}
               strokeWidth={5}
+              animationDuration={1}
             >
               <Label
                 content={({ viewBox }) => {
@@ -84,7 +86,7 @@ export function PieGraph(data: any) {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalPower.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
