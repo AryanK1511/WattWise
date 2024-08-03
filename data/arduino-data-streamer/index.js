@@ -2,6 +2,8 @@
 const { faker } = require("@faker-js/faker");
 // https://github.com/mqttjs/MQTT.js
 const mqtt = require("mqtt");
+// Arduino Parser
+const parser = require("./app");
 
 // Make up a fake device name
 const deviceId = process.env.DEVICE_ID;
@@ -16,10 +18,16 @@ const client = mqtt.connect(process.env.MQTT_URL, { clientId });
 // Log errors
 client.on("error", (err) => console.error("MQTT error", { deviceId, err }));
 
+// Event listener for when data is received from the parser
+var PowerVal = 0;
+parser.on("data", function (data) {
+  PowerVal = data;
+});
+
 const simulateDeviceReading = () => {
   const data = {
     // Random number between 50 and 100
-    power: faker.datatype.float({ min: 50, max: 100 }),
+    power: PowerVal,
     // Current date and time (in ms)
     recordedTimestamp: Date.now(),
   };
