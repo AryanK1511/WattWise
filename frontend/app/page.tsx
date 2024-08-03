@@ -1,21 +1,13 @@
 "use client";
+
 import { AreaGraph } from "@/components/charts/area-graph";
 import { BarGraph } from "@/components/charts/bar-graph";
 import { PieGraph } from "@/components/charts/pie-graph";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [data, setData] = useState<any>({
-    data: {
-      power: "378",
-      timestamp: "2024-08-03T09:28:41.000Z",
-      weekday: 5,
-      is_weekend: 1,
-      is_public_holiday: 0,
-    },
-  });
+  const [data, setData] = useState<any>({});
 
-  const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino/current";
   const getDynamoData = async () => {
     try {
       const res = await fetch(`/api/dynamo`);

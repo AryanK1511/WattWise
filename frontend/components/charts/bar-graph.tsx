@@ -129,14 +129,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function BarGraph(data: any) {
+export function BarGraph({ data }: { data: any }) {
   const [chartData, setChartData] = useState<any>();
   const [total, setTotal] = useState<any>({ desktop: 0, mobile: 0 });
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("desktop");
 
   React.useEffect(() => {
-    chartDataHard[chartDataHard.length - 1].desktop = Number(data.data.power);
+    chartDataHard[chartDataHard.length - 1].desktop = Number(data.power);
 
     let currentTime = new Date().getTime();
     let currentHour, currentMinute;

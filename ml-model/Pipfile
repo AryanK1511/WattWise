@@ -8,8 +8,8 @@ flask = "*"
 pandas = "*"
 numpy = "*"
 matplotlib = "*"
-scikit-learn = "==1.3.2"
 jsonify = "*"
+scikit-learn = "==1.3.2"
 
 [dev-packages]
 
