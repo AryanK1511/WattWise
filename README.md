@@ -37,3 +37,8 @@ http://localhost:3000/power/arduino?since=1m
 ```bash
 curl -X GET http://localhost:3000/power/arduino/current
 ```
+
+### Houses
+
+House 1 averages around 600 during nights, 400 during days, and 700 during weekend and public holiday
+House 2 averages on the higher side, 500 during weekdays, 900 during nights, and 1100 during weekend and public holidays
