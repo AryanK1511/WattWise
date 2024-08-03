@@ -5,9 +5,11 @@ const {
 } = require("@google/generative-ai");
 
 function buildPrompt(message: string) {
-  const prompt = `These are timestamps and power values from the last 60 seconds. Can you sum up and tell me
-  a predicted energy usage for the next 60 seconds in Watt Hours? Just the number with unit. (Energy = Power * Time):
+  const prompt = `These 60 power values (in Watts) over 60 seconds. Can you average them and predict what the energy comsuption would be
+  over the next 1 minute in watt hours? (the average *  60 seconds):
+  (Note: Predict even if you think it's not enough data & Give me only the number + unit)
   ${message}`;
+  console.log(prompt);
   return prompt;
 }
 
