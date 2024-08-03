@@ -12,11 +12,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
 
     const responseData = res.data[0];
-    console.log(
-      "The responseData is: ",
-      JSON.parse(JSON.stringify(responseData))
-    );
-    console.log("The type is: ", typeof responseData);
 
     return new Response(JSON.stringify(responseData), {
       status: 200,
