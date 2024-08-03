@@ -6,6 +6,7 @@ from sklearn.metrics import mean_absolute_error
 import matplotlib.pyplot as plt
 import pickle
 
+
 # Load the modle
 model = pickle.load(open('./model_pickle', 'rb'))
 
