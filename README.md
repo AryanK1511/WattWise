@@ -1,5 +1,9 @@
 # Hackthe6ix
 
+WattWise is an innovative energy-saving app that uses an Arduino-powered device to monitor and predict household electricity usage and bills in real-time. By providing a web-based dashboard with live data and bill predictions, it incentivizes users to reduce their energy consumption. This solution not only helps save money but also promotes environmental sustainability by reducing overall electricity usage.
+
+![WattWise logo](./assets/WattWise.png)
+
 ## API
 
 To get power data, use the following URLs

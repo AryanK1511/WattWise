@@ -35,14 +35,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PieGraph(data: any) {
+export function PieGraph({ data }: { data: any }) {
   const [chartData, setChartData] = useState<any>();
   const [totalPower, setTotalPower] = useState<number>(0);
 
   React.useEffect(() => {
-    chartDataHard[0].visitors = Number(data.data.power);
+    chartDataHard[0].visitors = Number(data.power);
     setChartData(chartDataHard);
-    setTotalPower(Number(data.data.power) + 100);
+    setTotalPower(Number(data.power) + 100);
   }, [data]);
 
   return (
@@ -69,7 +69,7 @@ export function PieGraph(data: any) {
               nameKey="browser"
               innerRadius={60}
               strokeWidth={5}
-              animationDuration={1}
+              animationDuration={500}
             >
               <Label
                 content={({ viewBox }) => {
