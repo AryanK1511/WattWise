@@ -5,15 +5,6 @@ const Spec = require("./models/Spec");
 
 const app = express();
 
-// Return a date time in the past, as ms
-const parseSince = (since) => {
-  if (since) {
-    // Create a date that is in the past, '3m' -> 180000
-    const sinceDate = new Date(Date.now() - ms(since));
-    return sinceDate.getTime();
-  }
-};
-
 const parseLimit = (limit) => {
   if (limit) {
     return parseInt(limit, 10);
@@ -50,11 +41,10 @@ app.get("/power/:deviceId/current", async (req, res) => {
 // or give a time window (e.g., 1m or 2hours)
 app.get("/power/:deviceId", async (req, res) => {
   const { deviceId } = req.params;
-  const since = parseSince(req.query.since);
   const limit = parseLimit(req.query.limit);
 
   try {
-    const readings = await db.getReadings(deviceId, { since, limit });
+    const readings = await db.getReadings(deviceId, { limit });
 
     // Create Spec instance and add the readings
     const spec = new Spec();

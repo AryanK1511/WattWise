@@ -112,40 +112,19 @@ const addReading = async (deviceId, recordedTimestamp, power) => {
   }
 };
 
-// Create our query params, which differs depending on whether we include `since`
-const buildQueryParams = (deviceId, { since, limit }) => {
-  let params;
-
-  console.log({ since });
-
-  if (typeof since === "number") {
-    params = {
-      TableName: tableName,
-      // Value for the Partition Key, see:
-      // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.KeyConditionExpressions
-      KeyConditionExpression:
-        "deviceId = :deviceId and recordedTimestamp >= :since",
-      ExpressionAttributeValues: {
-        ":deviceId": deviceId,
-        ":since": since,
-      },
-      // Return in Descending order
-      ScanIndexForward: false,
-    };
-  } else {
-    params = {
-      TableName: tableName,
-      // Value for the Partition Key, see:
-      // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.KeyConditionExpressions
-      KeyConditionExpression: "deviceId = :deviceId",
-      ExpressionAttributeValues: {
-        ":deviceId": deviceId,
-      },
-      // Return in Descending order
-      ScanIndexForward: false,
-    };
-  }
-
+// Create our query params
+const buildQueryParams = (deviceId, { limit }) => {
+  let params = {
+    TableName: tableName,
+    // Value for the Partition Key, see:
+    // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.KeyConditionExpressions
+    KeyConditionExpression: "deviceId = :deviceId",
+    ExpressionAttributeValues: {
+      ":deviceId": deviceId,
+    },
+    // Return in Descending order
+    ScanIndexForward: false,
+  };
   if (typeof limit === "number" && limit > 0) {
     params.Limit = limit;
   }
@@ -153,10 +132,9 @@ const buildQueryParams = (deviceId, { since, limit }) => {
   return params;
 };
 
-// Query for all temperature readings for a given device, possibly since a given
-// date time until now, and possibly limiting the number of results.
-const getReadings = async (deviceId, { since, limit }) => {
-  const params = buildQueryParams(deviceId, { since, limit });
+// Query for all temperature readings for a given device
+const getReadings = async (deviceId, { limit }) => {
+  const params = buildQueryParams(deviceId, { limit });
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/querycommand.html
   const command = new QueryCommand(params);
 
