@@ -18,7 +18,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         hour: hour,
         weekday: weekday,
         is_weekend: is_weekend,
-        is_public_holiday: is_public_holiday,
+        is_holiday: is_public_holiday,
       }),
     });
 

@@ -5,9 +5,10 @@ const {
 } = require("@google/generative-ai");
 
 function buildPrompt(message: string) {
-  const prompt = `These 60 power values (in Watts) over 60 seconds. Can you average them and predict what the energy comsuption would be
-  over the next 1 minute in watt hours? (the average *  60 seconds):
-  (Note: Predict even if you think it's not enough data & Give me only the number + unit)
+  const prompt = `These are power readings from the past week. I want you to analyze them and tell me what you think 
+  as far as my power consumption goes. Tips and tricks, how I'm using more power on certain days, certain times, etc.
+  Give me 3 points, all 1 or 2 short sentences, be concise and to the point, don't talk about the lack of data or the quality of the data.
+  You can be creative and have fun with it, give some facts in there too.
   ${message}`;
   console.log(prompt);
   return prompt;
@@ -18,7 +19,7 @@ export async function getResponse(message: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
 
   const generationConfig = {
-    temperature: 0.4,
+    temperature: 1,
     topK: 0,
     topP: 0.95,
     maxOutputTokens: 8192,
