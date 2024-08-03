@@ -50,7 +50,7 @@ class SinglePower {
   calculateHour() {
     // Increment the entry counter and calculate the hour
     SinglePower.entryCounter++;
-    const hour = Math.floor(SinglePower.entryCounter / 2);
+    const hour = Math.floor(SinglePower.entryCounter / 15);
     return hour % 23;
   }
 }
