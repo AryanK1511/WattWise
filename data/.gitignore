@@ -1,0 +1,90 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variable files
+.env
+.env.test
+.env.production
+.env.local
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# VuePress build output
+.vuepress/dist
+
+# Gridsome build output
+.dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stylelint cache
+.stylelintcache
+
+# Storybook build output
+out
+
+# Build directories
+build
+out
+dist
+
+# Cache files
+.cache
+.temp
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Other files and directories
+*.log
+*.pid
+*.seed
+*.pid.lock
+*.gz
+*.zip
+*.sqlite
+*.db
+*.dump
+*.swp
+*.swo
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
