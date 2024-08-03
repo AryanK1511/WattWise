@@ -4,10 +4,12 @@ import { AreaGraph } from "@/components/charts/area-graph";
 import { BarGraph } from "@/components/charts/bar-graph";
 import { MathGrid } from "@/components/charts/math-grid";
 import { PieGraph } from "@/components/charts/pie-graph";
+import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState<any>({});
+  const { toast } = useToast();
 
   const getDynamoData = async () => {
     try {
@@ -19,6 +21,16 @@ export default function Home() {
 
       const res_data = await res.json();
       setData(res_data);
+
+      if (res_data.power > 700 || res_data.power < 300) {
+        toast({
+          title: "Warning, unusual power consumption detected!",
+          description:
+            "This is a warning message signifying unusual power consumption, beyond your limits of 300-700 watts.",
+          type: "error",
+        });
+      }
+
       return res_data;
     } catch (err) {
       console.log(err);
