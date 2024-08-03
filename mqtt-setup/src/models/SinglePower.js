@@ -1,12 +1,11 @@
-// SinglePower.js
 class SinglePower {
   constructor(power, timestamp, is_public_holiday) {
     const localDate = this.convertTimestampToTorontoTime(timestamp);
     this.power = power;
-    this.hour = localDate.getHours();
+    this.timestamp = localDate.toISOString();
     this.weekday = this.convertWeekday(localDate.getDay());
     this.is_weekend = [5, 6].includes(this.weekday) ? 1 : 0; // Saturday (5) and Sunday (6) are weekends
-    this.is_public_holiday = is_public_holiday ? 1 : 0; // Adjust based on your public holiday logic
+    this.is_public_holiday = is_public_holiday ? 1 : 0;
   }
 
   convertTimestampToTorontoTime(timestamp) {

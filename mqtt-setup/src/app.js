@@ -33,7 +33,6 @@ app.get("/power/:deviceId/current", async (req, res) => {
 
     // Create Spec instance and add the reading
     const spec = new Spec();
-    const now = new Date();
     spec.addSinglePower(reading.power, reading.recordedTimestamp, false);
 
     res.json(spec.getSpec());
@@ -60,11 +59,8 @@ app.get("/power/:deviceId", async (req, res) => {
     // Create Spec instance and add the readings
     const spec = new Spec();
     readings.forEach((reading) => {
-      console.log(reading);
       spec.addSinglePower(reading.power, reading.recordedTimestamp, false);
     });
-
-    console.log(spec.getSpec());
 
     res.json(spec.getSpec());
   } catch (err) {
