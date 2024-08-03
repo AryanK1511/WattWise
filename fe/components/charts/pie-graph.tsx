@@ -17,7 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
+
+let chartData = [
   { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
   { browser: "other", visitors: 1, fill: "var(--color-other)" },
 ];
@@ -33,10 +34,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PieGraph() {
+export function PieGraph(data: any) {
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
   }, []);
+
+  React.useEffect(() => {
+    console.log(JSON.stringify(data));
+    chartData[0].visitors = data;
+  });
 
   return (
     <Card className="flex flex-col">
