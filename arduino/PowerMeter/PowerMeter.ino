@@ -22,5 +22,7 @@ void loop() {
 
   // Testing Purposes
   potValue = analogRead(potentiometerPin);
-  Serial.println(potValue * random(100) / 100.0);
+  Serial.println(potValue + random(250));
+
+  delay(1000);
 }
