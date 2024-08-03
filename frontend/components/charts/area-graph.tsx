@@ -42,6 +42,17 @@ export function AreaGraph({ data }: { data: any }) {
   const [dataArray, setDataArray] = useState<any[]>([]);
   const [predictedData, setPredictedData] = useState<any>({});
 
+  for (let i = 0; i < 24; i++) {
+    let hour = i;
+    // change things here - KRINS
+    dataArray.push({
+      hour: i,
+      weekday: 0,
+      is_weekend: 0,
+      is_public_holiday: 0,
+    });
+  }
+
   // Fetch the data from flask model
   const getPredictedData = async () => {
     try {
@@ -50,7 +61,16 @@ export function AreaGraph({ data }: { data: any }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataArray),
+        body: JSON.stringify(
+          dataArray.map((data) => {
+            return {
+              hour: data.hour,
+              weekday: data.weekday,
+              is_weekend: data.is_weekend,
+              is_public_holiday: data.is_public_holiday,
+            };
+          })
+        ),
       });
 
       if (!res.ok) {
@@ -63,11 +83,6 @@ export function AreaGraph({ data }: { data: any }) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    const newData = data;
-    setDataArray((prevData) => [...prevData, newData]);
-  }, [data]);
 
   // Update the data array and fetch new predicted data
   useEffect(() => {

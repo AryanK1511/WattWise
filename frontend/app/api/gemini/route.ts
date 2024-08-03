@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       hour: data.hour,
       weekday: data.weekday,
       is_weekend: data.is_weekend,
-      is_holiday: data.is_public_holiday,
+      is_public_holiday: data.is_public_holiday,
     }));
 
     console.log(extractedData);

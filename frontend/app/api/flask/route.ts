@@ -7,19 +7,14 @@ const url = "http://localhost:3000/power/arduino?limit=60";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const { hour, weekday, is_public_holiday, is_weekend } = await req.json();
+    const record_array = await req.json();
 
     const flask_res = await fetch("http://localhost:5000/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        hour: hour,
-        weekday: weekday,
-        is_weekend: is_weekend,
-        is_holiday: is_public_holiday,
-      }),
+      body: JSON.stringify(record_array),
     });
 
     if (flask_res.status !== 200) {
