@@ -18,23 +18,15 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { time: "", building1: 305, building2: 200 },
-  { time: "", building1: 237, building2: 120 },
-  { time: "", building1: 73, building2: 190 },
-  { time: "", building1: 209, building2: 130 },
-  { time: "", building1: 214, building2: 140 },
-  { time: "", building1: 305, building2: 200 },
-  { time: "", building1: 237, building2: 120 },
-  { time: "", building1: 73, building2: 190 },
-  { time: "", building1: 305, building2: 200 },
-  { time: "", building1: 237, building2: 120 },
-  { time: "", building1: 73, building2: 190 },
-  { time: "", building1: 209, building2: 130 },
-  { time: "", building1: 214, building2: 140 },
-  { time: "", building1: 305, building2: 200 },
-  { time: "", building1: 237, building2: 120 },
-  { time: "", building1: 73, building2: 190 },
+let chartData = [
+  { time: "", building1: 400, building2: 230 },
+  { time: "", building1: 450, building2: 210 },
+  { time: "", building1: 500, building2: 240 },
+  { time: "", building1: 525, building2: 190 },
+  { time: "", building1: 500, building2: 190 },
+  { time: "", building1: 475, building2: 190 },
+  { time: "", building1: 475, building2: 200 },
+  { time: "", building1: 475, building2: 240 },
 ];
 
 const chartConfig = {
@@ -48,9 +40,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function AreaGraph({ data }: { data: any }) {
+export function AreaGraph() {
   const [predictedData, setPredictedData] = useState<any>({});
   const [currentHourState, setCurrentHourState] = useState<number>(0);
+  const [chart, setChart] = useState<any>({});
 
   // Fetch the data from flask model
   const getPredictedData = async () => {
@@ -59,15 +52,13 @@ export function AreaGraph({ data }: { data: any }) {
     let weekday = 6;
     let isWeekend = 1;
 
-    for (let i = 0; i < 24; i++) {
-      dataArray.push([
-        {
-          hour: currentHour,
-          weekday: weekday,
-          is_weekend: isWeekend,
-          is_public_holiday: 0,
-        },
-      ]);
+    for (let i = 0; i < 8; i++) {
+      dataArray.push({
+        hour: currentHour,
+        weekday: weekday,
+        is_weekend: isWeekend,
+        is_public_holiday: 0,
+      });
 
       currentHour++;
       if (currentHour > 23) {
@@ -98,6 +89,7 @@ export function AreaGraph({ data }: { data: any }) {
       }
 
       const res_data = await res.json();
+      console.log("The predicted data is: ", res_data);
       setPredictedData(res_data);
     } catch (err) {
       console.log(err);
@@ -108,9 +100,9 @@ export function AreaGraph({ data }: { data: any }) {
   useEffect(() => {
     let currentTime = new Date().getTime();
     let currentHour, currentMinute;
+    getPredictedData();
 
     setCurrentHourState(Number(new Date().getHours().toString()));
-
     for (let i = 7; i >= 0; i--) {
       currentHour = new Date(currentTime).getHours();
       if (currentHour > 23) {
@@ -119,32 +111,29 @@ export function AreaGraph({ data }: { data: any }) {
       chartData[i].time = `${currentHour.toString().padStart(2, "0")}`;
       currentTime -= 60000 * 60;
     }
-    currentTime = new Date().getTime();
-    for (let i = 8; i < 16; i++) {
-      currentHour = new Date(currentTime).getHours() + 1;
-      if (currentHour > 23) {
-        currentHour = 0;
-      }
-      chartData[i].time = `${currentHour.toString().padStart(2, "0")}`;
-      currentTime += 60000 * 60;
-    }
 
-    const intervalId = setInterval(async () => {
-      // await getPredictedData();
-
-      console.log("The predicted data is: ", predictedData);
-    }, 1300);
-
-    // Clear interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [predictedData]);
+    // currentTime = new Date().getTime();
+    // for (let i = 0; i < 8; i++) {
+    //   currentHour = new Date(currentTime).getHours() + 1;
+    //   if (currentHour > 23) {
+    //     currentHour = 0;
+    //   }
+    //   let time = `${currentHour.toString().padStart(2, "0")}`;
+    //   chartData.push({
+    //     time: time,
+    //     building1: predictedData[i],
+    //     building2: predictedData[i],
+    //   });
+    //   currentTime += 60000 * 60;
+    // }
+  });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Predicted Usage</CardTitle>
         <CardDescription>
-          Showing last 12 hours of usage and predicted usage for the next 12{" "}
+          Showing last 8 hours of usage and predicted usage for the next 8
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -171,7 +160,7 @@ export function AreaGraph({ data }: { data: any }) {
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <ReferenceLine x="11" stroke="red" />
+            <ReferenceLine x="03" stroke="red" />
             <Line
               dataKey="building2"
               type="natural"
