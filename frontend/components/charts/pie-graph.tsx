@@ -35,14 +35,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PieGraph({ data }: { data: any }) {
+export function PieGraph({ data, data2 }: { data: any; data2: any }) {
   const [chartData, setChartData] = useState<any>();
   const [totalPower, setTotalPower] = useState<number>(0);
 
   React.useEffect(() => {
     chartDataHard[0].visitors = Number(data.power);
+    chartDataHard[1].visitors = Number(data2.power);
     setChartData(chartDataHard);
-    setTotalPower(Number(data.power) + 100);
+    setTotalPower(Number(data.power) + Number(data2.power));
   }, [data]);
 
   return (
@@ -86,7 +87,7 @@ export function PieGraph({ data }: { data: any }) {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalPower.toLocaleString()}
+                          {totalPower.toLocaleString().split(".")[0]}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
