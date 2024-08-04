@@ -23,7 +23,7 @@ export default function Home() {
       const res_data = await res.json();
       setData(res_data);
 
-      if (res_data.power > 700 || res_data.power < 300) {
+      if (res_data.power > 800 || res_data.power < 150) {
         toast({
           title: "Warning, unusual power consumption detected!",
           description:
@@ -38,6 +38,14 @@ export default function Home() {
     }
   };
 
+  const getGeminiToast = async (data) => {
+    toast({
+      title: "We've noticed some interesting data!",
+      description: data,
+      type: "success",
+    });
+  };
+
   // Fetch the data every 1.3 seconds
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -45,9 +53,24 @@ export default function Home() {
       console.log("The data is: ", data);
     }, 1300);
 
+    const geminiIntervalId = setInterval(async () => {
+      const gemini_res = await fetch(`/api/gemini`);
+
+      if (!gemini_res.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const gemini_res_data = await gemini_res.text();
+      console.log("The gemini data is: ", gemini_res_data);
+      getGeminiToast(gemini_res_data);
+    }, 120000);
+
     // Clear interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [data]);
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(geminiIntervalId);
+    };
+  }, []);
 
   return (
     <>

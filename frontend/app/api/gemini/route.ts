@@ -3,7 +3,7 @@ import { getResponse } from "./model";
 import axios from "axios";
 
 //const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino?limit=60";
-const url = "http://localhost:3000/power/arduino?limit=2520";
+const url = "http://localhost:3000/power/arduino?limit=120";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
@@ -21,8 +21,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       is_weekend: data.is_weekend,
       is_public_holiday: data.is_public_holiday,
     }));
-
-    console.log(extractedData);
 
     const gemini_res = await getResponse(JSON.stringify(extractedData));
 
