@@ -7,7 +7,7 @@ const {
 function buildPrompt(message: string) {
   const prompt = `These are power readings from the past week. I want you to analyze them and tell me what you think 
   as far as my power consumption goes. Tips and tricks, how I'm using more power on certain days, certain times, etc.
-  Give me 3 points, all 1 or 2 short sentences, be concise and to the point, don't talk about the lack of data or the quality of the data.
+  Give me 3 points, 1 short sentence each, don't talk about the lack of data or the quality of the data.
   You can be creative and have fun with it, give some facts in there too.
   ${message}`;
   console.log(prompt);
