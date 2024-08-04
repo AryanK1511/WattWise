@@ -1,9 +1,12 @@
 const express = require("express");
-const ms = require("ms");
 const db = require("./db");
+const cors = require("cors");
 const Spec = require("./models/Spec");
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
 
 const parseLimit = (limit) => {
   if (limit) {
