@@ -25,7 +25,7 @@ const publishDeviceReading = () => {
     // power reading that we get from Arduino
     power: arduinoPower || null,
     // Current date and time (in ms)
-    recordedTimestamp: Date.now(),
+    recordedTimestamp: new Date(),
   };
   // We need to send this as a string
   const message = JSON.stringify(data);
