@@ -2,7 +2,7 @@
 // 5V = 5.04V
 
 
-const int vsensor = A2;
+const int vsensor = A3;
 float vIn;
 float vOut;
 float voltageSensorVal;
@@ -17,7 +17,7 @@ void loop() {
   float average = 0;
   for(int i = 0; i < 1000; i++) 
   {
-    average = average + (.0264 * analogRead(A0) -13.51) / 1000;
+    average = average + (.0264 * analogRead(A1) -13.51) / 1000;
     delay(1);
   }
 
@@ -29,6 +29,6 @@ void loop() {
   //Serial.print("Voltage = ");
   //Serial.print(vIn - 12.59);
   //Serial.println("V");
-  Serial.println(((vIn * average) + 1 ) * 150);
+  Serial.println(((vIn * average) + 1 ) * 500);
   delay(1000);
 }

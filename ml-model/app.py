@@ -29,6 +29,6 @@ def predict():
 
     # Convert the array of objects into a DataFrame
     df = pd.DataFrame(input_data)
-
-    return f"{model.predict(df)}"
+    jsonify(model.predict(df).tolist())
+    return jsonify(model.predict(df).tolist())
 
