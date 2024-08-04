@@ -66,7 +66,7 @@ const createTable = async () => {
           },
           {
             AttributeName: "recordedTimestamp",
-            AttributeType: "N", // number
+            AttributeType: "S", // number
           },
         ],
         KeySchema: [
