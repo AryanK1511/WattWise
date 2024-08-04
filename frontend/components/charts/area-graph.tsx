@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { LineChart, CartesianGrid, Line, XAxis, ReferenceLine } from "recharts";
 import {
   Card,
   CardContent,
@@ -19,58 +19,78 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { time: "", building1: 305, building2: 200 },
+  { time: "", building1: 237, building2: 120 },
+  { time: "", building1: 73, building2: 190 },
+  { time: "", building1: 209, building2: 130 },
+  { time: "", building1: 214, building2: 140 },
+  { time: "", building1: 305, building2: 200 },
+  { time: "", building1: 237, building2: 120 },
+  { time: "", building1: 73, building2: 190 },
+  { time: "", building1: 305, building2: 200 },
+  { time: "", building1: 237, building2: 120 },
+  { time: "", building1: 73, building2: 190 },
+  { time: "", building1: 209, building2: 130 },
+  { time: "", building1: 214, building2: 140 },
+  { time: "", building1: 305, building2: 200 },
+  { time: "", building1: 237, building2: 120 },
+  { time: "", building1: 73, building2: 190 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  building1: {
+    label: "Building1",
     color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
+  building2: {
+    label: "Building2",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export function AreaGraph({ data }: { data: any }) {
-  const [dataArray, setDataArray] = useState<any[]>([]);
   const [predictedData, setPredictedData] = useState<any>({});
-
-  for (let i = 0; i < 24; i++) {
-    let hour = i;
-    // change things here - KRINS
-    dataArray.push({
-      hour: i,
-      weekday: 0,
-      is_weekend: 0,
-      is_public_holiday: 0,
-    });
-  }
+  const [currentHourState, setCurrentHourState] = useState<number>(0);
 
   // Fetch the data from flask model
   const getPredictedData = async () => {
+    let dataArray = [];
+    let currentHour = Number(new Date().getHours().toString());
+    let weekday = 6;
+    let isWeekend = 1;
+
+    for (let i = 0; i < 24; i++) {
+      dataArray.push([
+        {
+          hour: currentHour,
+          weekday: weekday,
+          is_weekend: isWeekend,
+          is_public_holiday: 0,
+        },
+      ]);
+
+      currentHour++;
+      if (currentHour > 23) {
+        currentHour = 0;
+
+        weekday++;
+        if (weekday > 6) {
+          weekday = 0;
+        }
+
+        if (weekday === 5 || weekday === 6) {
+          isWeekend = 1;
+        }
+      }
+    }
+
     try {
       const res = await fetch(`/api/flask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(
-          dataArray.map((data) => {
-            return {
-              hour: data.hour,
-              weekday: data.weekday,
-              is_weekend: data.is_weekend,
-              is_public_holiday: data.is_public_holiday,
-            };
-          })
-        ),
+        body: JSON.stringify(dataArray),
       });
 
       if (!res.ok) {
@@ -86,8 +106,32 @@ export function AreaGraph({ data }: { data: any }) {
 
   // Update the data array and fetch new predicted data
   useEffect(() => {
+    let currentTime = new Date().getTime();
+    let currentHour, currentMinute;
+
+    setCurrentHourState(Number(new Date().getHours().toString()));
+
+    for (let i = 7; i >= 0; i--) {
+      currentHour = new Date(currentTime).getHours();
+      if (currentHour > 23) {
+        currentHour = 0;
+      }
+      chartData[i].time = `${currentHour.toString().padStart(2, "0")}`;
+      currentTime -= 60000 * 60;
+    }
+    currentTime = new Date().getTime();
+    for (let i = 8; i < 16; i++) {
+      currentHour = new Date(currentTime).getHours() + 1;
+      if (currentHour > 23) {
+        currentHour = 0;
+      }
+      chartData[i].time = `${currentHour.toString().padStart(2, "0")}`;
+      currentTime += 60000 * 60;
+    }
+
     const intervalId = setInterval(async () => {
-      await getPredictedData();
+      // await getPredictedData();
+
       console.log("The predicted data is: ", predictedData);
     }, 1300);
 
@@ -98,9 +142,9 @@ export function AreaGraph({ data }: { data: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>Predicted Usage</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing last 12 hours of usage and predicted usage for the next 12{" "}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -108,8 +152,7 @@ export function AreaGraph({ data }: { data: any }) {
           config={chartConfig}
           className="aspect-auto h-[310px] w-full"
         >
-          <AreaChart
-            accessibilityLayer
+          <LineChart
             data={chartData}
             margin={{
               left: 12,
@@ -118,7 +161,7 @@ export function AreaGraph({ data }: { data: any }) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="time"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -128,37 +171,24 @@ export function AreaGraph({ data }: { data: any }) {
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <Area
-              dataKey="mobile"
+            <ReferenceLine x="11" stroke="red" />
+            <Line
+              dataKey="building2"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-building1)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
+              stroke="var(--color-building1)"
             />
-            <Area
-              dataKey="desktop"
+            <Line
+              dataKey="building1"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="var(--color-building2)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
+              stroke="var(--color-building2)"
             />
-          </AreaChart>
+          </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

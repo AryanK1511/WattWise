@@ -9,28 +9,32 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState<any>({});
+  const [data2, setData2] = useState<any>({});
   const { toast } = useToast();
 
   // Fetch the data from dynamo DB
   const getDynamoData = async () => {
     try {
       const res = await fetch(`/api/dynamo`);
+      const res2 = await fetch(`/api/dynamo2`);
 
       if (!res.ok) {
         throw new Error("Something went wrong!");
       }
 
       const res_data = await res.json();
+      const res_data2 = await res2.json();
       setData(res_data);
+      setData2(res_data2);
 
-      if (res_data.power > 700 || res_data.power < 300) {
-        toast({
-          title: "Warning, unusual power consumption detected!",
-          description:
-            "This is a warning message signifying unusual power consumption, beyond your limits of 300-700 watts.",
-          type: "error",
-        });
-      }
+      // if (res_data.power > 700 || res_data.power < 300) {
+      //   toast({
+      //     title: "Warning, unusual power consumption detected!",
+      //     description:
+      //       "This is a warning message signifying unusual power consumption, beyond your limits of 300-700 watts.",
+      //     type: "error",
+      //   });
+      // }
 
       return res_data;
     } catch (err) {
@@ -38,22 +42,45 @@ export default function Home() {
     }
   };
 
+  const getGeminiToast = async (data) => {
+    toast({
+      title: "We've noticed some interesting data!",
+      description: data,
+      type: "success",
+    });
+  };
+
   // Fetch the data every 1.3 seconds
   useEffect(() => {
     const intervalId = setInterval(async () => {
       await getDynamoData();
-      console.log("The data is: ", data);
+      console.log("The data is: ", data, data2);
     }, 1300);
 
+    const geminiIntervalId = setInterval(async () => {
+      const gemini_res = await fetch(`/api/gemini`);
+
+      if (!gemini_res.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const gemini_res_data = await gemini_res.text();
+      console.log("The gemini data is: ", gemini_res_data);
+      getGeminiToast(gemini_res_data);
+    }, 120000);
+
     // Clear interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [data]);
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(geminiIntervalId);
+    };
+  }, []);
 
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <BarGraph data={data} />
+          <BarGraph data={data} data2={data2} />
         </div>
         <div className="col-span-3">
           <MathGrid data={data} />
@@ -62,7 +89,7 @@ export default function Home() {
           <AreaGraph data={data} />
         </div>
         <div className="col-span-4 md:col-span-3">
-          <PieGraph data={data} />
+          <PieGraph data={data} data2={data2} />
         </div>
       </div>
     </>

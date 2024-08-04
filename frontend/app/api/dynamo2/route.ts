@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-// const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino/current";
-const url = "https://honest-peaches-repair.loca.lt/power/arduino/current";
-
+const url = " https://b744-192-12-181-141.ngrok-free.app/power/arduino/current";
 // const url = "http://localhost:3000/power/arduino/current";
 
 export async function GET(req: NextRequest, res: NextResponse) {
