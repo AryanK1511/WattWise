@@ -28,7 +28,7 @@ def predict():
     input_data = request.get_json()
 
     # Convert the array of objects into a DataFrame
-    df = pd.DataFrame([input_data])
+    df = pd.DataFrame(input_data)
 
     return f"{model.predict(df)}"
 

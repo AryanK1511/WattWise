@@ -1,4 +1,4 @@
-hour,weekday,is_weekend,is_holiday,power
+hour,weekday,is_weekend,is_public_holiday,power
 0,5,1,0,600
 1,5,1,0,690
 2,5,1,0,690
