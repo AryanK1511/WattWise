@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { time } from "console";
 
-//const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino?limit=60";
-const url = "http://localhost:3000/power/arduino?limit=60";
+const url = "https://a6db-138-51-93-60.ngrok-free.app/power/arduino?limit=60";
+// const url = "http://localhost:3000/power/arduino?limit=60";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {

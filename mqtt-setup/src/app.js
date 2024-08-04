@@ -1,14 +1,17 @@
 const express = require("express");
-const ms = require("ms");
 const db = require("./db");
+const cors = require("cors");
 const Spec = require("./models/Spec");
 
 const app = express();
+app.use(cors());
 
+// Parse the limit query parameter and return it as an integer.
 const parseLimit = (limit) => {
   if (limit) {
     return parseInt(limit, 10);
   }
+
   // Use 300 as a default otherwise
   return 300;
 };
