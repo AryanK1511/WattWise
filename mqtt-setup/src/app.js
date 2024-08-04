@@ -4,14 +4,14 @@ const cors = require("cors");
 const Spec = require("./models/Spec");
 
 const app = express();
-
-// Enable CORS for all routes
 app.use(cors());
 
+// Parse the limit query parameter and return it as an integer.
 const parseLimit = (limit) => {
   if (limit) {
     return parseInt(limit, 10);
   }
+
   // Use 300 as a default otherwise
   return 300;
 };
