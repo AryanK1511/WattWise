@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-const url = "https://slimy-garlics-switch.loca.lt/power/arduino/current";
+const url = "https://cyan-pillows-smash.loca.lt/power/arduino/current";
 
 // const url = "http://localhost:3000/power/arduino/current";
 

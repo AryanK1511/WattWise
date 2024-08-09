@@ -55,30 +55,30 @@ export default function Home() {
   // };
 
   // // Fetch the data every 1.3 seconds
-  // useEffect(() => {
-  //   const intervalId = setInterval(async () => {
-  //     await getDynamoData();
-  //     console.log("The data is: ", data, data2);
-  //   }, 1300);
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await getDynamoData();
+      console.log("The data is: ", data, data2);
+    }, 1300);
 
-  //   // const geminiIntervalId = setInterval(async () => {
-  //     // const gemini_res = await fetch(`/api/gemini`);
+    // const geminiIntervalId = setInterval(async () => {
+    // const gemini_res = await fetch(`/api/gemini`);
 
-  //     // if (!gemini_res.ok) {
-  //     //   throw new Error("Something went wrong!");
-  //     // }
+    // if (!gemini_res.ok) {
+    //   throw new Error("Something went wrong!");
+    // }
 
-  //     // const gemini_res_data = await gemini_res.text();
-  //     // console.log("The gemini data is: ", gemini_res_data);
-  //     // getGeminiToast(gemini_res_data);
-  //   // }, 120000);
+    // const gemini_res_data = await gemini_res.text();
+    // console.log("The gemini data is: ", gemini_res_data);
+    // getGeminiToast(gemini_res_data);
+    // }, 120000);
 
-  //   // Clear interval on component unmount
-  //   return () => {
-  //     clearInterval(intervalId);
-  //     clearInterval(geminiIntervalId);
-  //   };
-  // }, []);
+    // Clear interval on component unmount
+    return () => {
+      clearInterval(intervalId);
+      // clearInterval(geminiIntervalId);
+    };
+  }, []);
 
   return (
     <>

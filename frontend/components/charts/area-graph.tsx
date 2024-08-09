@@ -160,7 +160,7 @@ export function AreaGraph() {
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <ReferenceLine x="03" stroke="red" />
+            <ReferenceLine x="08" stroke="red" />
             <Line
               dataKey="building2"
               type="natural"
