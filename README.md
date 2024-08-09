@@ -10,25 +10,6 @@ By providing a web-based dashboard with live data and bill predictions, it incen
 
 This solution not only helps save money but also promotes environmental sustainability by reducing overall electricity usage.
 
-## Running the code locally
-
-> **NOTE:** This documentation is yet to be completed.
-
-1. Setting up the docker containers to run MQTT, dynamoDB and some other services.
-
-   ```bash
-   cd mqtt-setup/
-   docker compose up --build
-   ```
-
-2. Set up the data streaming from Arduino to your serial port.
-
-   ```bash
-   cd arduino-data-streamer/
-   npm install
-   node index.js
-   ```
-
 ## Authors
 
 - [Aryan Khurana](https://github.com/AryanK1511)

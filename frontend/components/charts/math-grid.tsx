@@ -5,20 +5,29 @@ import { useEffect, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function MathGrid({ data }: { data: any }) {
+export function MathGrid({ data, data2 }: { data: any; data2: any }) {
   const [reading, setReading] = useState(0);
   const cardItems = [
     {
       title: "Usage Per Day",
-      value: `${(Number(data.power * 15) * 24).toFixed(1)} kWh`,
+      value: `${
+        (Number(data.power * 15) * 24).toFixed(1) +
+        (Number(data2.power * 15) * 24).toFixed(1)
+      } kWh`,
     },
     {
       title: "Usage Per Month",
-      value: `${(Number(data.power * 15) * 24 * 30).toFixed(1)} kWh`,
+      value: `${
+        (Number(data.power * 15) * 24 * 30).toFixed(1) +
+        (Number(data2.power * 15) * 24 * 30).toFixed(1)
+      } kWh`,
     },
     {
       title: "Cost Prediction",
-      value: `$${(Number(data.power * 15) * 0.5).toFixed(1)}`,
+      value: `$${
+        (Number(data.power * 15) * 0.122).toFixed(1) +
+        (Number(data2.power * 15) * 0.122).toFixed(1)
+      }`,
     },
   ];
 
