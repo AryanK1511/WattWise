@@ -1,5 +1,7 @@
 # WattWise
 
+**2nd Place Overall Winner @ HackThe6ix 2024** 🏆🥈
+
 WattWise is an innovative energy-saving app that uses an Arduino-powered device to monitor and predict household electricity usage and bills in real-time. Check out our [Devpost](https://devpost.com/software/hackthe6ix-bqlrik) to learn more.
 
 <p align="center">
